@@ -25,12 +25,17 @@ jobs:
         with:
           script: |
             let tag = ${{ steps.get-latest-tag.outputs.tag }};
-            let patch = /v(\d+)\.(\d+).(\d+)-nightly/g.exec(tag)[3];
-            let next_patch = parseInt(patch) + 1;
-            let next_tag = tag.replace(patch+"-nightly", next_patch+"-nightly");
-            github.octokit.rest.git.createRef({
-              context.repo.owner,
-              context.repo.repo,
-              "refs/tags/"+next_tag,
-              context.sha,
-            });
+            let result = /v(\d+)\.(\d+).(\d+)-nightly/g.exec(tag);
+
+            if (result === null) {
+                let patch = result[3];
+                let next_patch = (parseInt(patch) + 1).toString();
+                let next_tag = tag.replace(patch+"-nightly", next_patch+"-nightly");
+                github.octokit.rest.git.createRef({
+                  context.repo.owner,
+                  context.repo.repo,
+                  "refs/tags/"+next_tag,
+                  context.sha,
+                });
+            }
+
