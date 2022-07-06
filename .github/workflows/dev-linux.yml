@@ -20,6 +20,7 @@ concurrency:
 env:
   BUILD_PROFILE: debug
 
+
 jobs:
   check:
     runs-on: [self-hosted, X64, Linux]
