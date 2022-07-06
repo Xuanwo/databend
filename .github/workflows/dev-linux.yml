@@ -70,6 +70,7 @@ jobs:
           target: ${{ matrix.arch }}-unknown-linux-musl
           profile: debug
 
+
   test_unit:
     runs-on: [self-hosted, X64, Linux]
     if: ${{ github.event.action == 'test-command' || !github.event.pull_request.draft }}
