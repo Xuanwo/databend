@@ -20,7 +20,6 @@ concurrency:
 env:
   BUILD_PROFILE: debug
 
-
 jobs:
   check:
     runs-on: [self-hosted, X64, Linux]
@@ -35,7 +34,7 @@ jobs:
 
   build_gnu:
     name: build_${{ matrix.arch }}_gnu
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ github.event.action == 'test-command' || !github.event.pull_request.draft }}
     runs-on: [self-hosted, X64, Linux, development]
     strategy:
       matrix:
@@ -54,7 +53,7 @@ jobs:
 
   build_musl:
     name: build_${{ matrix.arch }}_musl
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ github.event.action == 'test-command' || !github.event.pull_request.draft }}
     runs-on: [self-hosted, X64, Linux, development]
     strategy:
       matrix:
@@ -73,7 +72,7 @@ jobs:
 
   test_unit:
     runs-on: [self-hosted, X64, Linux]
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ github.event.action == 'test-command' || !github.event.pull_request.draft }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -85,7 +84,7 @@ jobs:
 
   test_metactl:
     runs-on: [self-hosted, X64, Linux, development]
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ github.event.action == 'test-command' || !github.event.pull_request.draft }}
     needs: build_gnu
     steps:
       - uses: actions/checkout@v3
@@ -93,7 +92,7 @@ jobs:
 
   test_compat:
     runs-on: [self-hosted, X64, Linux, development]
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ github.event.action == 'test-command' || !github.event.pull_request.draft }}
     needs: build_gnu
     steps:
       - uses: actions/checkout@v3
@@ -101,7 +100,7 @@ jobs:
 
   test_meta_cluster:
     runs-on: [self-hosted, X64, Linux, development]
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ github.event.action == 'test-command' || !github.event.pull_request.draft }}
     needs: build_gnu
     steps:
       - uses: actions/checkout@v3
@@ -109,7 +108,7 @@ jobs:
 
   test_stateless_standalone_linux:
     runs-on: [self-hosted, X64, Linux, development]
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ github.event.action == 'test-command' || !github.event.pull_request.draft }}
     needs: build_gnu
     steps:
       - uses: actions/checkout@v3
@@ -117,7 +116,7 @@ jobs:
 
   test_stateless_cluster_linux:
     runs-on: [self-hosted, X64, Linux, development]
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ github.event.action == 'test-command' || !github.event.pull_request.draft }}
     needs: build_gnu
     steps:
       - uses: actions/checkout@v3
@@ -125,7 +124,7 @@ jobs:
 
   test_sqllogic_standalone_linux:
     runs-on: [self-hosted, X64, Linux, development]
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ github.event.action == 'test-command' || !github.event.pull_request.draft }}
     needs: build_gnu
     steps:
       - uses: actions/checkout@v2
@@ -133,7 +132,7 @@ jobs:
 
   test_stateful_standalone_linux:
     runs-on: [self-hosted, X64, Linux, development]
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ github.event.action == 'test-command' || !github.event.pull_request.draft }}
     needs: build_gnu
     steps:
       - uses: actions/checkout@v3
@@ -141,7 +140,7 @@ jobs:
 
   build_hive:
     runs-on: [self-hosted, X64, Linux, development]
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ github.event.action == 'test-command' || !github.event.pull_request.draft }}
     steps:
       - uses: actions/checkout@v3
       - uses: ./.github/actions/build_linux_hive
@@ -151,7 +150,7 @@ jobs:
 
   test_stateful_hive_standalone:
     runs-on: [self-hosted, X64, Linux, development]
-    if: ${{ !github.event.pull_request.draft }}
+    if: ${{ github.event.action == 'test-command' || !github.event.pull_request.draft }}
     needs: build_hive
     steps:
       - uses: actions/checkout@v3
